@@ -14,15 +14,15 @@ use phpDocumentor\Reflection\Php\ProjectFactoryStrategies;
 use phpDocumentor\Reflection\Php\Trait_ as Trait_Element;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\TraitUse as TraitUseNode;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 
-/**
- * @coversDefaultClass \phpDocumentor\Reflection\Php\Factory\TraitUse
- * @covers \phpDocumentor\Reflection\Php\Factory\AbstractFactory
- */
+#[CoversClass(TraitUse::class)]
+#[CoversClass(AbstractFactory::class)]
 final class TraitUseTest extends TestCase
 {
     /** @return mixed[][] */
-    public function consumerProvider(): array
+    public static function consumerProvider(): array
     {
         return [
             [new Class_Element(new Fqsen('\MyClass'))],
@@ -36,7 +36,6 @@ final class TraitUseTest extends TestCase
         $this->fixture = new TraitUse();
     }
 
-    /** @covers ::matches */
     public function testMatchesOnlyTraitUseNode(): void
     {
         self::assertTrue(
@@ -47,7 +46,6 @@ final class TraitUseTest extends TestCase
         );
     }
 
-    /** @covers ::create */
     public function testCreateThrowsExceptionWhenStackDoesNotContainClass(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -56,12 +54,8 @@ final class TraitUseTest extends TestCase
         $this->fixture->create($context, $this->givenTraitUse(), new ProjectFactoryStrategies([]));
     }
 
-    /**
-     * @param Class_Element|Trait_Element $traitConsumer
-     *
-     * @covers ::create
-     * @dataProvider consumerProvider
-     */
+    /** @param Class_Element|Trait_Element $traitConsumer */
+    #[DataProvider('consumerProvider')]
     public function testCreateWillAddUsedTraitToContextTop(Element $traitConsumer): void
     {
         $context = self::createContext()->push($traitConsumer);

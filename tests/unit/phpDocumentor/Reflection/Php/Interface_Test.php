@@ -18,23 +18,19 @@ use phpDocumentor\Reflection\DocBlock;
 use phpDocumentor\Reflection\Fqsen;
 use phpDocumentor\Reflection\Location;
 use phpDocumentor\Reflection\Metadata\MetaDataContainer as MetaDataContainerInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 
-/**
- * @uses \phpDocumentor\Reflection\DocBlock
- * @uses \phpDocumentor\Reflection\Fqsen
- * @uses \phpDocumentor\Reflection\Php\Method
- * @uses \phpDocumentor\Reflection\Php\Constant
- * @uses \phpDocumentor\Reflection\Php\Visibility
- *
- * @coversDefaultClass \phpDocumentor\Reflection\Php\Interface_
- * @covers ::__construct
- * @covers ::<private>
- *
- * @property Interface_ $fixture
- */
+/** @property Interface_ $fixture */
+#[CoversClass(Interface_::class)]
+#[UsesClass('\phpDocumentor\Reflection\DocBlock')]
+#[UsesClass('\phpDocumentor\Reflection\Fqsen')]
+#[UsesClass('\phpDocumentor\Reflection\Php\Method')]
+#[UsesClass('\phpDocumentor\Reflection\Php\Constant')]
+#[UsesClass('\phpDocumentor\Reflection\Php\Visibility')]
 final class Interface_Test extends TestCase
 {
-    use MetadataContainerTest;
+    use MetadataContainerTestHelper;
 
     private Fqsen $fqsen;
 
@@ -63,28 +59,21 @@ final class Interface_Test extends TestCase
         return $this->fixture;
     }
 
-    /** @covers ::getName */
     public function testGetName(): void
     {
         $this->assertSame($this->fqsen->getName(), $this->fixture->getName());
     }
 
-    /** @covers ::getFqsen */
     public function testGetFqsen(): void
     {
         $this->assertSame($this->fqsen, $this->fixture->getFqsen());
     }
 
-    /** @covers ::getDocBlock */
     public function testGetDocblock(): void
     {
         $this->assertSame($this->docBlock, $this->fixture->getDocBlock());
     }
 
-    /**
-     * @covers ::addConstant
-     * @covers ::getConstants
-     */
     public function testSettingAndGettingConstants(): void
     {
         $this->assertEquals([], $this->fixture->getConstants());
@@ -96,10 +85,6 @@ final class Interface_Test extends TestCase
         $this->assertEquals(['\MySpace\MyInterface::MY_CONSTANT' => $constant], $this->fixture->getConstants());
     }
 
-    /**
-     * @covers ::addMethod
-     * @covers ::getMethods
-     */
     public function testSettingAndGettingMethods(): void
     {
         $this->assertEquals([], $this->fixture->getMethods());
@@ -111,7 +96,6 @@ final class Interface_Test extends TestCase
         $this->assertEquals(['\MySpace\MyInterface::myMethod()' => $method], $this->fixture->getMethods());
     }
 
-    /** @covers ::getParents */
     public function testReturningTheParentsOfThisInterface(): void
     {
         $this->assertSame($this->exampleParents, $this->fixture->getParents());
@@ -123,7 +107,6 @@ final class Interface_Test extends TestCase
         $this->assertLineAndColumnNumberIsReturnedWhenALocationIsProvided($fixture);
     }
 
-    /** @covers ::__construct */
     public function testArrayWithParentsMustBeFqsenObjects(): void
     {
         $this->expectException(InvalidArgumentException::class);

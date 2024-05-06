@@ -15,19 +15,15 @@ namespace phpDocumentor\Reflection\Php;
 
 use phpDocumentor\Reflection\Types\Mixed_;
 use phpDocumentor\Reflection\Types\String_;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Tests the functionality for the Argument class.
- *
- * @coversDefaultClass \phpDocumentor\Reflection\Php\Argument
- * @covers ::__construct
- * @covers ::<private>
- * @covers ::<protected>
  */
+#[CoversClass(Argument::class)]
 final class ArgumentTest extends TestCase
 {
-    /** @covers ::getType */
     public function testGetTypes(): void
     {
         $argument = new Argument('myArgument', null, 'myDefaultValue', true, true);
@@ -43,14 +39,12 @@ final class ArgumentTest extends TestCase
         $this->assertEquals(new String_(), $argument->getType());
     }
 
-    /** @covers ::getName */
     public function testGetName(): void
     {
         $argument = new Argument('myArgument', null, 'myDefault', true, true);
         $this->assertEquals('myArgument', $argument->getName());
     }
 
-    /** @covers ::getDefault */
     public function testGetDefault(): void
     {
         $argument = new Argument('myArgument', null, 'myDefaultValue', true, true);
@@ -60,7 +54,6 @@ final class ArgumentTest extends TestCase
         $this->assertNull($argument->getDefault());
     }
 
-    /** @covers ::isByReference */
     public function testGetWhetherArgumentIsPassedByReference(): void
     {
         $argument = new Argument('myArgument', null, 'myDefaultValue', true, true);
@@ -70,7 +63,6 @@ final class ArgumentTest extends TestCase
         $this->assertFalse($argument->isByReference());
     }
 
-    /** @covers ::isVariadic */
     public function testGetWhetherArgumentisVariadic(): void
     {
         $argument = new Argument('myArgument', null, 'myDefaultValue', true, true);

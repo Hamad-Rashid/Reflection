@@ -25,6 +25,9 @@ use PhpParser\Node\Stmt\Class_ as ClassNode;
 use PhpParser\Node\Stmt\Property as PropertyNode;
 use PhpParser\Node\Stmt\PropertyProperty;
 use PhpParser\PrettyPrinter\Standard as PrettyPrinter;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\UsesClass;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use stdClass;
@@ -32,16 +35,13 @@ use stdClass;
 use function current;
 use function next;
 
-/**
- * @uses \phpDocumentor\Reflection\Php\Factory\PropertyIterator
- * @uses \phpDocumentor\Reflection\Php\Property
- * @uses \phpDocumentor\Reflection\Php\Visibility
- * @uses \phpDocumentor\Reflection\Php\ProjectFactoryStrategies
- * @uses \phpDocumentor\Reflection\Php\Factory\Type
- *
- * @covers \phpDocumentor\Reflection\Php\Factory\Property
- * @covers \phpDocumentor\Reflection\Php\Factory\AbstractFactory
- */
+#[CoversClass(Property::class)]
+#[CoversClass(AbstractFactory::class)]
+#[UsesClass('\phpDocumentor\Reflection\Php\Factory\PropertyIterator')]
+#[UsesClass('\phpDocumentor\Reflection\Php\Property')]
+#[UsesClass('\phpDocumentor\Reflection\Php\Visibility')]
+#[UsesClass('\phpDocumentor\Reflection\Php\ProjectFactoryStrategies')]
+#[UsesClass('\phpDocumentor\Reflection\Php\Factory\Type')]
 final class PropertyTest extends TestCase
 {
     use ProphecyTrait;
@@ -60,7 +60,7 @@ final class PropertyTest extends TestCase
         $this->assertTrue($this->fixture->matches(self::createContext(null), new PropertyNode(1, [])));
     }
 
-    /** @dataProvider visibilityProvider */
+    #[DataProvider('visibilityProvider')]
     public function testCreateWithVisibility(int $input, string $expectedVisibility): void
     {
         $constantStub = $this->buildPropertyMock($input);
@@ -72,7 +72,7 @@ final class PropertyTest extends TestCase
     }
 
     /** @return array<string|int[]> */
-    public function visibilityProvider(): array
+    public static function visibilityProvider(): array
     {
         return [
             [

@@ -17,29 +17,22 @@ use OutOfBoundsException;
 use phpDocumentor\Reflection\Php\Factory\ContextStack;
 use phpDocumentor\Reflection\Php\Factory\DummyFactoryStrategy;
 use phpDocumentor\Reflection\Types\Context;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
  * Test case for ProjectFactoryStrategies
- *
- * @coversDefaultClass \phpDocumentor\Reflection\Php\ProjectFactoryStrategies
- * @covers ::__construct
- * @covers ::<private>
  */
+#[CoversClass(ProjectFactoryStrategies::class)]
 class ProjectFactoryStrategiesTest extends TestCase
 {
-    /** @covers ::addStrategy */
     public function testStrategiesAreChecked(): void
     {
         new ProjectFactoryStrategies([new DummyFactoryStrategy()]);
         $this->assertTrue(true);
     }
 
-    /**
-     * @covers ::findMatching
-     * @covers ::addStrategy
-     */
     public function testFindMatching(): void
     {
         $strategy  = new DummyFactoryStrategy();
@@ -52,7 +45,6 @@ class ProjectFactoryStrategiesTest extends TestCase
         $this->assertSame($strategy, $actual);
     }
 
-    /** @covers ::findMatching */
     public function testCreateThrowsExceptionWhenStrategyNotFound(): void
     {
         $this->expectException(OutOfBoundsException::class);

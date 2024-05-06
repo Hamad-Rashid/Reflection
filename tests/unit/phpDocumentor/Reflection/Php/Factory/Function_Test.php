@@ -24,6 +24,8 @@ use PhpParser\Comment\Doc;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Expression;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -31,17 +33,11 @@ use stdClass;
 
 use function current;
 
-/**
- * @uses   \phpDocumentor\Reflection\Php\Factory\Function_::matches
- * @uses   \phpDocumentor\Reflection\Php\Function_
- * @uses   \phpDocumentor\Reflection\Php\Argument
- * @uses   \phpDocumentor\Reflection\Php\Factory\Type
- *
- * @coversDefaultClass \phpDocumentor\Reflection\Php\Factory\Function_
- * @covers \phpDocumentor\Reflection\Php\Factory\AbstractFactory
- * @covers ::<private>
- * @covers ::<protected>
- */
+#[CoversClass(Function_::class)]
+#[CoversClass(AbstractFactory::class)]
+#[UsesClass('\phpDocumentor\Reflection\Php\Function_')]
+#[UsesClass('\phpDocumentor\Reflection\Php\Argument')]
+#[UsesClass('\phpDocumentor\Reflection\Php\Factory\Type')]
 final class Function_Test extends TestCase
 {
     use ProphecyTrait;
@@ -54,7 +50,6 @@ final class Function_Test extends TestCase
         $this->fixture = new Function_($this->docBlockFactory->reveal());
     }
 
-    /** @covers ::matches */
     public function testMatches(): void
     {
         $this->assertFalse($this->fixture->matches(self::createContext(null), new stdClass()));
@@ -64,7 +59,6 @@ final class Function_Test extends TestCase
         ));
     }
 
-    /** @covers ::create */
     public function testCreateWithoutParameters(): void
     {
         $functionMock = $this->prophesize(\PhpParser\Node\Stmt\Function_::class);
@@ -85,7 +79,6 @@ final class Function_Test extends TestCase
         $this->assertEquals('\SomeSpace::function()', (string) $function->getFqsen());
     }
 
-    /** @covers ::create */
     public function testCreateWithDocBlock(): void
     {
         $doc = new Doc('Text');
@@ -110,7 +103,6 @@ final class Function_Test extends TestCase
         $this->assertSame($docBlock, $function->getDocBlock());
     }
 
-    /** @covers ::create */
     public function testIteratesStatements(): void
     {
         $doc = new Doc('Text');

@@ -22,17 +22,13 @@ use phpDocumentor\Reflection\Php\ProjectFactoryStrategies;
 use phpDocumentor\Reflection\Php\StrategyContainer;
 use PhpParser\Node\Stmt\EnumCase as EnumCaseNode;
 use PhpParser\PrettyPrinter\Standard;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use stdClass;
 
-/**
- * @coversDefaultClass \phpDocumentor\Reflection\Php\Factory\EnumCase
- * @covers \phpDocumentor\Reflection\Php\Factory\AbstractFactory
- * @covers ::__construct
- * @covers ::<protected>
- * @covers ::<private>
- */
+#[CoversClass(EnumCase::class)]
+#[CoversClass(AbstractFactory::class)]
 final class EnumCaseTest extends TestCase
 {
     use ProphecyTrait;
@@ -45,7 +41,6 @@ final class EnumCaseTest extends TestCase
         $this->fixture = new EnumCase($this->docblockFactory->reveal(), new Standard());
     }
 
-    /** @covers ::matches */
     public function testMatches(): void
     {
         self::assertFalse($this->fixture->matches(self::createContext(null), new stdClass()));
@@ -57,7 +52,6 @@ final class EnumCaseTest extends TestCase
         );
     }
 
-    /** @covers ::create */
     public function testSimpleCreate(): void
     {
         $containerMock = $this->prophesize(StrategyContainer::class)->reveal();

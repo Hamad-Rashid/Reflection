@@ -26,21 +26,20 @@ use PhpParser\Node\Const_;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Const_ as ConstStatement;
 use PhpParser\PrettyPrinter\Standard as PrettyPrinter;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use stdClass;
 
 use function current;
 
-/**
- * @uses   \phpDocumentor\Reflection\Php\Factory\GlobalConstantIterator
- * @uses   \phpDocumentor\Reflection\Php\ProjectFactoryStrategies
- * @uses   \phpDocumentor\Reflection\Php\Constant
- * @uses   \phpDocumentor\Reflection\Php\Visibility
- *
- * @covers \phpDocumentor\Reflection\Php\Factory\GlobalConstant
- * @covers \phpDocumentor\Reflection\Php\Factory\AbstractFactory
- */
+#[CoversClass(GlobalConstant::class)]
+#[CoversClass(AbstractFactory::class)]
+#[UsesClass('\phpDocumentor\Reflection\Php\Factory\GlobalConstantIterator')]
+#[UsesClass('\phpDocumentor\Reflection\Php\ProjectFactoryStrategies')]
+#[UsesClass('\phpDocumentor\Reflection\Php\Constant')]
+#[UsesClass('\phpDocumentor\Reflection\Php\Visibility')]
 final class GlobalConstantTest extends TestCase
 {
     use ProphecyTrait;

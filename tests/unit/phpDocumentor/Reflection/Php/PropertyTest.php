@@ -18,18 +18,20 @@ use phpDocumentor\Reflection\Fqsen;
 use phpDocumentor\Reflection\Location;
 use phpDocumentor\Reflection\Metadata\MetaDataContainer as MetaDataContainerInterface;
 use phpDocumentor\Reflection\Types\Integer;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 
 /**
  * Tests the functionality for the Property class.
  *
- * @coversDefaultClass \phpDocumentor\Reflection\Php\Property
- * @covers ::__construct
- * @covers ::<private>
  * @property Property $fixture
  */
+#[CoversClass(Property::class)]
+#[UsesClass('\phpDocumentor\Reflection\Php\Visibility')]
+#[UsesClass('\phpDocumentor\Reflection\Types\Integer')]
 final class PropertyTest extends TestCase
 {
-    use MetadataContainerTest;
+    use MetadataContainerTestHelper;
 
     private Fqsen $fqsen;
 
@@ -50,12 +52,6 @@ final class PropertyTest extends TestCase
         return $this->fixture;
     }
 
-    /**
-     * @uses \phpDocumentor\Reflection\Php\Visibility
-     *
-     * @covers ::getFqsen
-     * @covers ::getName
-     */
     public function testGetFqsenAndGetName(): void
     {
         $property = new Property($this->fqsen);
@@ -64,12 +60,6 @@ final class PropertyTest extends TestCase
         $this->assertEquals($this->fqsen->getName(), $property->getName());
     }
 
-    /**
-     * @uses \phpDocumentor\Reflection\Php\Visibility
-     *
-     * @covers ::isStatic
-     * @covers ::__construct
-     */
     public function testGettingWhetherPropertyIsStatic(): void
     {
         $property = new Property($this->fqsen, $this->visibility, $this->docBlock, null, false);
@@ -79,12 +69,6 @@ final class PropertyTest extends TestCase
         $this->assertTrue($property->isStatic());
     }
 
-    /**
-     * @uses \phpDocumentor\Reflection\Php\Visibility
-     *
-     * @covers ::isReadOnly
-     * @covers ::__construct
-     */
     public function testGettingWhetherPropertyIsReadOnly(): void
     {
         $property = new Property($this->fqsen, $this->visibility, $this->docBlock, null);
@@ -105,12 +89,6 @@ final class PropertyTest extends TestCase
         $this->assertTrue($property->isReadOnly());
     }
 
-    /**
-     * @uses \phpDocumentor\Reflection\Php\Visibility
-     *
-     * @covers ::getVisibility
-     * @covers ::__construct
-     */
     public function testGettingVisibility(): void
     {
         $property = new Property($this->fqsen, $this->visibility, $this->docBlock, null, true);
@@ -118,12 +96,6 @@ final class PropertyTest extends TestCase
         $this->assertSame($this->visibility, $property->getVisibility());
     }
 
-    /**
-     * @uses \phpDocumentor\Reflection\Php\Visibility
-     *
-     * @covers ::getTypes
-     * @covers ::addType
-     */
     public function testSetAndGetTypes(): void
     {
         $property = new Property($this->fqsen, $this->visibility, $this->docBlock, null, true);
@@ -133,11 +105,6 @@ final class PropertyTest extends TestCase
         $this->assertEquals(['a'], $property->getTypes());
     }
 
-    /**
-     * @uses \phpDocumentor\Reflection\Php\Visibility
-     *
-     * @covers ::getDefault
-     */
     public function testGetDefault(): void
     {
         $property = new Property($this->fqsen, $this->visibility, $this->docBlock, null, false);
@@ -147,11 +114,6 @@ final class PropertyTest extends TestCase
         $this->assertEquals('a', $property->getDefault());
     }
 
-    /**
-     * @uses \phpDocumentor\Reflection\Php\Visibility
-     *
-     * @covers ::getDocBlock
-     */
     public function testGetDocBlock(): void
     {
         $property = new Property($this->fqsen, $this->visibility, $this->docBlock, null, false);
@@ -164,12 +126,6 @@ final class PropertyTest extends TestCase
         $this->assertLineAndColumnNumberIsReturnedWhenALocationIsProvided($fixture);
     }
 
-    /**
-     * @uses \phpDocumentor\Reflection\Php\Visibility
-     * @uses \phpDocumentor\Reflection\Types\Integer
-     *
-     * @covers ::getType
-     */
     public function testGetType(): void
     {
         $type = new Integer();

@@ -30,21 +30,21 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_ as ClassNode;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\PrettyPrinter\Standard as PrettyPrinter;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\UsesClass;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use stdClass;
 
 use function current;
 
-/**
- * @uses   \phpDocumentor\Reflection\Php\Factory\ClassConstantIterator
- * @uses   \phpDocumentor\Reflection\Php\ProjectFactoryStrategies
- * @uses   \phpDocumentor\Reflection\Php\Constant
- * @uses   \phpDocumentor\Reflection\Php\Visibility
- *
- * @covers \phpDocumentor\Reflection\Php\Factory\ClassConstant
- * @covers \phpDocumentor\Reflection\Php\Factory\AbstractFactory
- */
+#[CoversClass(ClassConstant::class)]
+#[CoversClass(AbstractFactory::class)]
+#[UsesClass('\phpDocumentor\Reflection\Php\Factory\ClassConstantIterator')]
+#[UsesClass('\phpDocumentor\Reflection\Php\ProjectFactoryStrategies')]
+#[UsesClass('\phpDocumentor\Reflection\Php\Constant')]
+#[UsesClass('\phpDocumentor\Reflection\Php\Visibility')]
 final class ClassConstantTest extends TestCase
 {
     use ProphecyTrait;
@@ -66,7 +66,7 @@ final class ClassConstantTest extends TestCase
         $this->assertTrue($this->fixture->matches(self::createContext(null), $this->buildConstantIteratorStub()));
     }
 
-    /** @dataProvider visibilityProvider */
+    #[DataProvider('visibilityProvider')]
     public function testCreateWithVisibility(int $input, string $expectedVisibility, bool $isFinal = false): void
     {
         $constantStub = $this->buildConstantIteratorStub($input);
@@ -79,7 +79,7 @@ final class ClassConstantTest extends TestCase
     }
 
     /** @return array<string|int[]> */
-    public function visibilityProvider(): array
+    public static function visibilityProvider(): array
     {
         return [
             [

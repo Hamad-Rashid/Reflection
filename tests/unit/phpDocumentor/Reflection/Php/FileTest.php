@@ -16,23 +16,21 @@ namespace phpDocumentor\Reflection\Php;
 use phpDocumentor\Reflection\DocBlock;
 use phpDocumentor\Reflection\Fqsen;
 use phpDocumentor\Reflection\Metadata\MetaDataContainer as MetaDataContainerInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @uses \phpDocumentor\Reflection\Php\Trait_
- * @uses \phpDocumentor\Reflection\Php\Interface_
- * @uses \phpDocumentor\Reflection\Php\Class_
- * @uses \phpDocumentor\Reflection\Php\Namespace_
- * @uses \phpDocumentor\Reflection\Php\Function_
- * @uses \phpDocumentor\Reflection\Php\Constant
- *
- * @coversDefaultClass \phpDocumentor\Reflection\Php\File
- * @covers ::__construct
- * @covers ::<private>
- */
+#[CoversClass(File::class)]
+#[UsesClass('\phpDocumentor\Reflection\Php\Trait_')]
+#[UsesClass('\phpDocumentor\Reflection\Php\Interface_')]
+#[UsesClass('\phpDocumentor\Reflection\Php\Class_')]
+#[UsesClass('\phpDocumentor\Reflection\Php\Namespace_')]
+#[UsesClass('\phpDocumentor\Reflection\Php\Function_')]
+#[UsesClass('\phpDocumentor\Reflection\Php\Constant')]
+#[UsesClass('\phpDocumentor\Reflection\Php\Visibility')]
 final class FileTest extends TestCase
 {
-    use MetadataContainerTest;
+    use MetadataContainerTestHelper;
 
     public const EXAMPLE_HASH = 'a-hash-string';
 
@@ -61,10 +59,6 @@ final class FileTest extends TestCase
         return $this->fixture;
     }
 
-    /**
-     * @covers ::getClasses
-     * @covers ::AddClass
-     */
     public function testAddAndGetClasses(): void
     {
         $this->assertEmpty($this->fixture->getClasses());
@@ -75,12 +69,6 @@ final class FileTest extends TestCase
         $this->assertEquals(['\MySpace\MyClass' => $class], $this->fixture->getClasses());
     }
 
-    /**
-     * @uses \phpDocumentor\Reflection\Php\Visibility
-     *
-     * @covers ::getConstants
-     * @covers ::addConstant
-     */
     public function testAddAndGetConstants(): void
     {
         $this->assertEmpty($this->fixture->getConstants());
@@ -91,10 +79,6 @@ final class FileTest extends TestCase
         $this->assertEquals(['\MySpace::MY_CONSTANT' => $constant], $this->fixture->getConstants());
     }
 
-    /**
-     * @covers ::getFunctions
-     * @covers ::addFunction
-     */
     public function testAddAndGetFunctions(): void
     {
         $this->assertEmpty($this->fixture->getFunctions());
@@ -105,10 +89,6 @@ final class FileTest extends TestCase
         $this->assertEquals(['\MySpace::MyFunction()' => $function], $this->fixture->getFunctions());
     }
 
-    /**
-     * @covers ::getInterfaces
-     * @covers ::addInterface
-     */
     public function testAddAndGetInterfaces(): void
     {
         $this->assertEmpty($this->fixture->getInterfaces());
@@ -119,10 +99,6 @@ final class FileTest extends TestCase
         $this->assertEquals(['\MySpace\MyInterface' => $interface], $this->fixture->getInterfaces());
     }
 
-    /**
-     * @covers ::getTraits
-     * @covers ::addTrait
-     */
     public function testAddAndGetTraits(): void
     {
         $this->assertEmpty($this->fixture->getTraits());
@@ -133,10 +109,6 @@ final class FileTest extends TestCase
         $this->assertEquals(['\MySpace\MyTrait' => $trait], $this->fixture->getTraits());
     }
 
-    /**
-     * @covers ::getEnums
-     * @covers ::addEnum
-     */
     public function testAddAndGetEnums(): void
     {
         $this->assertEmpty($this->fixture->getEnums());
@@ -147,40 +119,31 @@ final class FileTest extends TestCase
         $this->assertEquals(['\MySpace\MyEnum' => $enum], $this->fixture->getEnums());
     }
 
-    /** @covers ::getDocBlock */
     public function testGetDocBlock(): void
     {
         $this->assertSame($this->docBlock, $this->fixture->getDocBlock());
     }
 
-    /** @covers ::getHash */
     public function testGetHash(): void
     {
         $this->assertSame(self::EXAMPLE_HASH, $this->fixture->getHash());
     }
 
-    /** @covers ::getName */
     public function testGetName(): void
     {
         $this->assertSame(self::EXAMPLE_NAME, $this->fixture->getName());
     }
 
-    /** @covers ::getPath */
     public function testSetAndGetPath(): void
     {
         $this->assertSame(self::EXAMPLE_PATH, $this->fixture->getPath());
     }
 
-    /** @covers ::getSource */
     public function testSetAndGetSource(): void
     {
         $this->assertSame(self::EXAMPLE_SOURCE, $this->fixture->getSource());
     }
 
-    /**
-     * @covers ::addNamespace
-     * @covers ::getNamespaces
-     */
     public function testSetAndGetNamespaceAliases(): void
     {
         $this->assertEmpty($this->fixture->getNamespaces());
@@ -190,10 +153,6 @@ final class FileTest extends TestCase
         $this->assertEquals(['\MyNamepace\Foo' => new Fqsen('\MyNamepace\Foo')], $this->fixture->getNamespaces());
     }
 
-    /**
-     * @covers ::getIncludes
-     * @covers ::addInclude
-     */
     public function testAddAndGetIncludes(): void
     {
         $this->assertEmpty($this->fixture->getIncludes());

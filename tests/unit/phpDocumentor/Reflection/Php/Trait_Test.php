@@ -17,16 +17,17 @@ use phpDocumentor\Reflection\DocBlock;
 use phpDocumentor\Reflection\Fqsen;
 use phpDocumentor\Reflection\Location;
 use phpDocumentor\Reflection\Metadata\MetaDataContainer as MetaDataContainerInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 
-/**
- * @coversDefaultClass \phpDocumentor\Reflection\Php\Trait_
- * @covers ::__construct
- * @covers ::<private>
- * @property Trait_ $fixture
- */
+/** @property Trait_ $fixture */
+#[CoversClass(Trait_::class)]
+#[UsesClass('\phpDocumentor\Reflection\Php\Property')]
+#[UsesClass('\phpDocumentor\Reflection\Php\Visibility')]
+#[UsesClass('\phpDocumentor\Reflection\Php\Method')]
 final class Trait_Test extends TestCase
 {
-    use MetadataContainerTest;
+    use MetadataContainerTestHelper;
 
     private Fqsen $fqsen;
 
@@ -47,23 +48,12 @@ final class Trait_Test extends TestCase
         return $this->fixture;
     }
 
-    /**
-     * @covers ::getFqsen
-     * @covers ::getName
-     */
     public function testGetFqsenAndGetName(): void
     {
         $this->assertSame($this->fqsen, $this->fixture->getFqsen());
         $this->assertEquals($this->fqsen->getName(), $this->fixture->getName());
     }
 
-    /**
-     * @uses \phpDocumentor\Reflection\Php\Property
-     * @uses \phpDocumentor\Reflection\Php\Visibility
-     *
-     * @covers ::addProperty
-     * @covers ::getProperties
-     */
     public function testAddAndGettingProperties(): void
     {
         $this->assertEquals([], $this->fixture->getProperties());
@@ -75,13 +65,6 @@ final class Trait_Test extends TestCase
         $this->assertEquals(['\MyTrait::$myProperty' => $property], $this->fixture->getProperties());
     }
 
-    /**
-     * @uses \phpDocumentor\Reflection\Php\Method
-     * @uses \phpDocumentor\Reflection\Php\Visibility
-     *
-     * @covers ::addMethod
-     * @covers ::getMethods
-     */
     public function testAddAndGettingMethods(): void
     {
         $this->assertEquals([], $this->fixture->getMethods());
@@ -93,10 +76,6 @@ final class Trait_Test extends TestCase
         $this->assertEquals(['\MyTrait::myMethod()' => $method], $this->fixture->getMethods());
     }
 
-    /**
-     * @covers ::getUsedTraits
-     * @covers ::AddUsedTrait
-     */
     public function testAddAndGettingUsedTrait(): void
     {
         $this->assertEmpty($this->fixture->getUsedTraits());
@@ -108,10 +87,6 @@ final class Trait_Test extends TestCase
         $this->assertSame(['\MyTrait' => $trait], $this->fixture->getUsedTraits());
     }
 
-    /**
-     * @covers ::getConstants
-     * @covers ::addConstant
-     */
     public function testAddAndGettingConstants(): void
     {
         $this->assertEmpty($this->fixture->getConstants());
@@ -123,7 +98,6 @@ final class Trait_Test extends TestCase
         $this->assertSame(['\MyClass::MY_CONSTANT' => $constant], $this->fixture->getConstants());
     }
 
-    /** @covers ::getDocBlock */
     public function testGetDocblock(): void
     {
         $this->assertSame($this->docBlock, $this->fixture->getDocBlock());

@@ -17,21 +17,16 @@ use phpDocumentor\Reflection\DocBlock;
 use phpDocumentor\Reflection\Fqsen;
 use phpDocumentor\Reflection\Location;
 use phpDocumentor\Reflection\Metadata\MetaDataContainer as MetaDataContainerInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 
-/**
- * @uses \phpDocumentor\Reflection\Php\Method
- * @uses \phpDocumentor\Reflection\Php\EnumCase
- *
- * @coversDefaultClass \phpDocumentor\Reflection\Php\Enum_
- * @covers ::__construct
- * @covers ::<private>
- * @covers ::<protected>
- *
- * @property Enum_ $fixture
- */
+/** @property Enum_ $fixture */
+#[CoversClass(Enum_::class)]
+#[UsesClass('\phpDocumentor\Reflection\Php\Method')]
+#[UsesClass('\phpDocumentor\Reflection\Php\EnumCase')]
 final class Enum_Test extends TestCase
 {
-    use MetadataContainerTest;
+    use MetadataContainerTestHelper;
 
     private Fqsen $parent;
 
@@ -56,34 +51,26 @@ final class Enum_Test extends TestCase
         return $this->fixture;
     }
 
-    /** @covers ::getName */
     public function testGettingName(): void
     {
         $this->assertSame($this->fqsen->getName(), $this->fixture->getName());
     }
 
-    /** @covers ::getBackedType */
     public function testGetBackedWithOutType(): void
     {
         $this->assertNull($this->fixture->getBackedType());
     }
 
-    /** @covers ::getFqsen */
     public function testGettingFqsen(): void
     {
         $this->assertSame($this->fqsen, $this->fixture->getFqsen());
     }
 
-    /** @covers ::getDocBlock */
     public function testGettingDocBlock(): void
     {
         $this->assertSame($this->docBlock, $this->fixture->getDocBlock());
     }
 
-    /**
-     * @covers ::getInterfaces
-     * @covers ::AddInterface
-     */
     public function testAddAndGettingInterfaces(): void
     {
         $this->assertEmpty($this->fixture->getInterfaces());
@@ -95,10 +82,6 @@ final class Enum_Test extends TestCase
         $this->assertSame(['\MyInterface' => $interface], $this->fixture->getInterfaces());
     }
 
-    /**
-     * @covers ::addConstant
-     * @covers ::getConstants
-     */
     public function testAddAndGettingConstants(): void
     {
         $this->assertEmpty($this->fixture->getConstants());
@@ -110,10 +93,6 @@ final class Enum_Test extends TestCase
         $this->assertSame(['\MyClass::MYCONST' => $constant], $this->fixture->getConstants());
     }
 
-    /**
-     * @covers ::addMethod
-     * @covers ::getMethods
-     */
     public function testAddAndGettingMethods(): void
     {
         $this->assertEmpty($this->fixture->getMethods());
@@ -125,10 +104,6 @@ final class Enum_Test extends TestCase
         $this->assertSame(['\MyClass::myMethod()' => $method], $this->fixture->getMethods());
     }
 
-    /**
-     * @covers ::getUsedTraits
-     * @covers ::AddUsedTrait
-     */
     public function testAddAndGettingUsedTrait(): void
     {
         $this->assertEmpty($this->fixture->getUsedTraits());
@@ -140,10 +115,6 @@ final class Enum_Test extends TestCase
         $this->assertSame(['\MyTrait' => $trait], $this->fixture->getUsedTraits());
     }
 
-    /**
-     * @covers ::addCase
-     * @covers ::getCases
-     */
     public function testAddAndGettingCases(): void
     {
         $this->assertEmpty($this->fixture->getCases());

@@ -20,14 +20,11 @@ use PhpParser\NodeTraverserInterface;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 
-/**
- * @coversDefaultClass \phpDocumentor\Reflection\Php\NodesFactory
- * @covers ::__construct
- * @covers ::<private>
- */
+#[CoversClass(NodesFactory::class)]
 final class NodesFactoryTest extends TestCase
 {
     use ProphecyTrait;
@@ -37,8 +34,6 @@ final class NodesFactoryTest extends TestCase
      *
      * Unfortunately, we cannot actually inspect whether all recommended items were instantiated, so I create an example
      * NodesFactory containing what I expected and this test will verify that no regression took place.
-     *
-     * @covers ::createInstance
      */
     public function testThatAFactoryWithRecommendedComponentsCanBeInstantiated(): void
     {
@@ -48,7 +43,6 @@ final class NodesFactoryTest extends TestCase
         $this->assertEquals($this->givenTheExpectedDefaultNodesFactory(), $factory);
     }
 
-    /** @covers ::create */
     public function testThatCodeGetsConvertedIntoNodes(): void
     {
         $parser = $this->prophesize(Parser::class);

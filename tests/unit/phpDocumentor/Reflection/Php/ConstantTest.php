@@ -17,21 +17,17 @@ use phpDocumentor\Reflection\DocBlock;
 use phpDocumentor\Reflection\Fqsen;
 use phpDocumentor\Reflection\Location;
 use phpDocumentor\Reflection\Metadata\MetaDataContainer as MetaDataContainerInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 
-/**
- * @uses \phpDocumentor\Reflection\DocBlock
- * @uses \phpDocumentor\Reflection\Php\Visibility
- * @uses \phpDocumentor\Reflection\Fqsen
- *
- * @coversDefaultClass \phpDocumentor\Reflection\Php\Constant
- * @covers ::__construct
- * @covers ::<private>
- *
- * @property Constant $fixture
- */
+/** @property Constant $fixture */
+#[CoversClass(Constant::class)]
+#[UsesClass('\phpDocumentor\Reflection\DocBlock')]
+#[UsesClass('\phpDocumentor\Reflection\Php\Visibility')]
+#[UsesClass('\phpDocumentor\Reflection\Fqsen')]
 final class ConstantTest extends TestCase
 {
-    use MetadataContainerTest;
+    use MetadataContainerTestHelper;
 
     private Fqsen $fqsen;
 
@@ -54,41 +50,27 @@ final class ConstantTest extends TestCase
         return $this->fixture;
     }
 
-    /**
-     * @covers ::getValue
-     * @covers ::__construct
-     */
     public function testGetValue(): void
     {
         $this->assertSame($this->value, $this->fixture->getValue());
     }
 
-    /**
-     * @covers ::isFinal
-     * @covers ::__construct
-     */
     public function testIsFinal(): void
     {
         $this->assertFalse($this->fixture->isFinal());
     }
 
-    /**
-     * @covers ::getFqsen
-     * @covers ::getName
-     */
     public function testGetFqsen(): void
     {
         $this->assertSame($this->fqsen, $this->fixture->getFqsen());
         $this->assertSame($this->fqsen->getName(), $this->fixture->getName());
     }
 
-    /** @covers ::getDocBlock */
     public function testGetDocblock(): void
     {
         $this->assertSame($this->docBlock, $this->fixture->getDocBlock());
     }
 
-    /** @covers ::getVisibility */
     public function testGetVisibility(): void
     {
         $this->assertEquals(new Visibility(Visibility::PUBLIC_), $this->fixture->getVisibility());

@@ -24,15 +24,12 @@ use PhpParser\Node\IntersectionType;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\UnionType;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PhpUnit\Framework\TestCase as PhpUnitTestCase;
 
-/**
- * @coversDefaultClass \phpDocumentor\Reflection\Php\Factory\Type
- * @covers ::<private>
- */
+#[CoversClass(Type::class)]
 final class TypeTest extends PhpUnitTestCase
 {
-    /** @covers ::fromPhpParser */
     public function testReturnsNullWhenNoTypeIsPassed(): void
     {
         $factory = new Type();
@@ -42,7 +39,6 @@ final class TypeTest extends PhpUnitTestCase
         $this->assertNull($result);
     }
 
-    /** @covers ::fromPhpParser */
     public function testReturnsReflectedType(): void
     {
         $factory = new Type();
@@ -54,7 +50,6 @@ final class TypeTest extends PhpUnitTestCase
         $this->assertEquals($expected, $result);
     }
 
-    /** @covers ::fromPhpParser */
     public function testReturnsNullableTypeWhenPassedAPhpParserNullable(): void
     {
         $factory = new Type();
@@ -66,7 +61,6 @@ final class TypeTest extends PhpUnitTestCase
         $this->assertEquals($expected, $result);
     }
 
-    /** @covers ::fromPhpParser */
     public function testReturnsUnion(): void
     {
         $factory = new Type();
@@ -78,7 +72,6 @@ final class TypeTest extends PhpUnitTestCase
         $this->assertEquals($expected, $result);
     }
 
-    /** @covers ::fromPhpParser */
     public function testReturnsUnionGivenVariousTypes(): void
     {
         $factory = new Type();
@@ -90,7 +83,6 @@ final class TypeTest extends PhpUnitTestCase
         $this->assertEquals($expected, $result);
     }
 
-    /** @covers ::fromPhpParser */
     public function testReturnsInterseptionType(): void
     {
         $factory = new Type();

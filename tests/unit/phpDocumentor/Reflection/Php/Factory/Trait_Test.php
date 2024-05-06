@@ -25,6 +25,8 @@ use phpDocumentor\Reflection\Php\Trait_ as TraitElement;
 use PhpParser\Comment\Doc;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Trait_ as TraitNode;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -32,17 +34,14 @@ use stdClass;
 
 use function current;
 
-/**
- * @uses \phpDocumentor\Reflection\Php\Trait_
- * @uses \phpDocumentor\Reflection\Php\Method
- * @uses \phpDocumentor\Reflection\Php\Visibility
- * @uses \phpDocumentor\Reflection\Php\Property
- * @uses \phpDocumentor\Reflection\Php\Factory\PropertyIterator
- *
- * @coversDefaultClass \phpDocumentor\Reflection\Php\Factory\Trait_
- * @covers \phpDocumentor\Reflection\Php\Factory\Trait_
- * @covers \phpDocumentor\Reflection\Php\Factory\AbstractFactory
- */
+#[CoversClass(Trait_::class)]
+#[CoversClass(Trait_::class)]
+#[CoversClass(AbstractFactory::class)]
+#[UsesClass('\phpDocumentor\Reflection\Php\Trait_')]
+#[UsesClass('\phpDocumentor\Reflection\Php\Method')]
+#[UsesClass('\phpDocumentor\Reflection\Php\Visibility')]
+#[UsesClass('\phpDocumentor\Reflection\Php\Property')]
+#[UsesClass('\phpDocumentor\Reflection\Php\Factory\PropertyIterator')]
 final class Trait_Test extends TestCase
 {
     use ProphecyTrait;
@@ -61,10 +60,6 @@ final class Trait_Test extends TestCase
         $this->assertTrue($this->fixture->matches(self::createContext(null), m::mock(TraitNode::class)));
     }
 
-    /**
-     * @covers ::create
-     * @covers ::doCreate
-     */
     public function testSimpleCreate(): void
     {
         $containerMock = m::mock(StrategyContainer::class);
@@ -77,10 +72,6 @@ final class Trait_Test extends TestCase
         $this->assertEquals('\Space\MyTrait', (string) $trait->getFqsen());
     }
 
-    /**
-     * @covers ::create
-     * @covers ::doCreate
-     */
     public function testIteratesStatements(): void
     {
         $method1           = new ClassMethod('\Space\MyTrait::method1');
@@ -111,7 +102,6 @@ final class Trait_Test extends TestCase
         );
     }
 
-    /** @covers ::create */
     public function testCreateWithDocBlock(): void
     {
         $doc       = new Doc('Text');

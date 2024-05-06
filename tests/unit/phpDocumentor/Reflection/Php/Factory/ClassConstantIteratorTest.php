@@ -20,23 +20,11 @@ use PhpParser\Comment\Doc;
 use PhpParser\Node\Const_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassConst;
+use PHPUnit\Framework\Attributes\CoversClass;
 
-/**
- * @coversDefaultClass \phpDocumentor\Reflection\Php\Factory\ClassConstantIterator
- * @covers ::__construct
- * @covers ::<private>
- */
+#[CoversClass(ClassConstantIterator::class)]
 final class ClassConstantIteratorTest extends MockeryTestCase
 {
-    /**
-     * @covers ::current()
-     * @covers ::next()
-     * @covers ::valid()
-     * @covers ::rewind()
-     * @covers ::getName()
-     * @covers ::getValue()
-     * @covers ::getFqsen()
-     */
     public function testIterateProps(): void
     {
         $const1 = new Const_('\Space\MyClass::MY_CONST1', new Variable('1'));
@@ -55,10 +43,6 @@ final class ClassConstantIteratorTest extends MockeryTestCase
         }
     }
 
-    /**
-     * @covers ::key()
-     * @covers ::next()
-     */
     public function testKey(): void
     {
         $constantMock = m::mock(ClassConst::class);
@@ -70,10 +54,6 @@ final class ClassConstantIteratorTest extends MockeryTestCase
         $this->assertEquals(1, $fixture->key());
     }
 
-    /**
-     * @covers ::__construct
-     * @covers ::getLine
-     */
     public function testProxyMethods(): void
     {
         $constantMock = m::mock(ClassConst::class);
@@ -84,7 +64,6 @@ final class ClassConstantIteratorTest extends MockeryTestCase
         $this->assertEquals(10, $fixture->getLine());
     }
 
-    /** @covers ::getDocComment */
     public function testGetDocCommentPropFirst(): void
     {
         $const = m::mock(Const_::class);
@@ -99,7 +78,6 @@ final class ClassConstantIteratorTest extends MockeryTestCase
         $this->assertEquals('test', $fixture->getDocComment()->getText());
     }
 
-    /** @covers ::getDocComment */
     public function testGetDocComment(): void
     {
         $const = m::mock(Const_::class);
