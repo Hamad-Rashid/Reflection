@@ -130,7 +130,7 @@ final class PropertyIterator implements Iterator
     /**
      * returns the default value of the current property.
      */
-    public function getDefault(): string|Expr|null
+    public function getDefault(): null|Expr
     {
         return $this->property->props[$this->index]->default;
     }

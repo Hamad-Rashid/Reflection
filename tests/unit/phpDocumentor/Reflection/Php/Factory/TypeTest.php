@@ -53,7 +53,7 @@ final class TypeTest extends PhpUnitTestCase
     public function testReturnsNullableTypeWhenPassedAPhpParserNullable(): void
     {
         $factory = new Type();
-        $given = new NullableType('integer');
+        $given = new NullableType(new Identifier('integer'));
         $expected = new Nullable(new Integer());
 
         $result = $factory->fromPhpParser($given);

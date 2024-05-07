@@ -25,6 +25,7 @@ use PhpParser\Node\Stmt\EnumCase;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\PropertyProperty;
+use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeTraverser;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
@@ -98,7 +99,7 @@ class ElementNameResolverTest extends TestCase
 
         $new = new New_($anonymousClass);
 
-        $namespace = new Namespace_(new Name('ANamespace'), $new);
+        $namespace = new Namespace_(new Name('ANamespace'), [new Return_($new)]);
 
         $this->fixture->enterNode($namespace);
         $this->fixture->enterNode($new);

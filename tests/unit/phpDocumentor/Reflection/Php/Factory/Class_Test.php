@@ -23,6 +23,7 @@ use phpDocumentor\Reflection\Php\Method as MethodElement;
 use phpDocumentor\Reflection\Php\ProjectFactoryStrategy;
 use phpDocumentor\Reflection\Php\StrategyContainer;
 use PhpParser\Comment\Doc;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_ as ClassNode;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -87,7 +88,7 @@ final class Class_Test extends TestCase
         $containerMock = m::mock(StrategyContainer::class);
         $classMock     = $this->buildClassMock();
         $classMock->shouldReceive('getDocComment')->andReturnNull();
-        $classMock->extends = 'Space\MyParent';
+        $classMock->extends = new Name('Space\MyParent');
 
         $class = $this->performCreate($classMock, $containerMock);
 
@@ -101,7 +102,7 @@ final class Class_Test extends TestCase
         $containerMock = m::mock(StrategyContainer::class);
         $classMock     = $this->buildClassMock();
         $classMock->shouldReceive('getDocComment')->andReturnNull();
-        $classMock->extends    = 'Space\MyParent';
+        $classMock->extends    = new Name('Space\MyParent');
         $classMock->implements = [
             new Name('MyInterface'),
         ];

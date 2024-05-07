@@ -86,6 +86,7 @@ final class EnumCaseTest extends TestCase
     private function buildEnumCaseMock(): ObjectProphecy
     {
         $enumMock = $this->prophesize(EnumCaseNode::class);
+        $enumMock->expr = null;
         $enumMock->getAttribute('fqsen')->willReturn(new Fqsen('\Space\MyEnum::VALUE'));
         $enumMock->getLine()->willReturn(1);
         $enumMock->getEndLine()->willReturn(2);

@@ -24,6 +24,7 @@ use phpDocumentor\Reflection\Php\ProjectFactoryStrategy;
 use phpDocumentor\Reflection\Php\StrategyContainer;
 use PhpParser\Comment\Doc;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
@@ -128,7 +129,9 @@ class MethodTest extends TestCase
     private function buildClassMethodMock(): MockInterface
     {
         $methodMock = m::mock(ClassMethod::class);
-        $methodMock->name = 'function';
+        $methodMock->name = new Identifier('function');
+        $methodMock->byRef = false;
+        $methodMock->stmts = [];
         $methodMock->shouldReceive('getAttribute')->andReturn(new Fqsen('\SomeSpace\Class::function()'));
         $methodMock->params = [];
 

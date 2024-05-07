@@ -62,6 +62,8 @@ final class Function_Test extends TestCase
     public function testCreateWithoutParameters(): void
     {
         $functionMock = $this->prophesize(\PhpParser\Node\Stmt\Function_::class);
+        $functionMock->byRef = false;
+        $functionMock->stmts = [];
         $functionMock->getAttribute('fqsen')->willReturn(new Fqsen('\SomeSpace::function()'));
         $functionMock->params = [];
         $functionMock->getDocComment()->willReturn(null);
@@ -83,6 +85,8 @@ final class Function_Test extends TestCase
     {
         $doc = new Doc('Text');
         $functionMock = $this->prophesize(\PhpParser\Node\Stmt\Function_::class);
+        $functionMock->byRef = false;
+        $functionMock->stmts = [];
         $functionMock->getAttribute('fqsen')->willReturn(new Fqsen('\SomeSpace::function()'));
         $functionMock->params = [];
         $functionMock->getDocComment()->willReturn($doc);
@@ -107,6 +111,8 @@ final class Function_Test extends TestCase
     {
         $doc = new Doc('Text');
         $functionMock = $this->prophesize(\PhpParser\Node\Stmt\Function_::class);
+        $functionMock->byRef = false;
+        $functionMock->stmts = [];
         $functionMock->getAttribute('fqsen')->willReturn(new Fqsen('\SomeSpace::function()'));
         $functionMock->params = [];
         $functionMock->getDocComment()->willReturn(null);

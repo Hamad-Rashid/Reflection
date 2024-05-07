@@ -161,6 +161,7 @@ final class Enum_Test extends TestCase
     private function buildEnumMock(): m\MockInterface|ClassNode
     {
         $enumMock = m::mock(EnumNode::class);
+        $enumMock->scalarType = null;
         $enumMock->shouldReceive('getAttribute')->andReturn(new Fqsen('\Space\MyEnum'));
         $enumMock->implements = [];
         $enumMock->stmts = [];
