@@ -13,13 +13,14 @@ use phpDocumentor\Reflection\Php\StrategyContainer;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_ as ClassNode;
 use PhpParser\Node\Stmt\Namespace_ as NamespaceNode;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use stdClass;
 
 use function current;
 
-/** @coversDefaultClass \phpDocumentor\Reflection\Php\Factory\Namespace_ */
+#[CoversClass(Namespace_::class)]
 final class Namespace_Test extends TestCase
 {
     use ProphecyTrait;
@@ -29,7 +30,6 @@ final class Namespace_Test extends TestCase
         $this->fixture = new Namespace_();
     }
 
-    /** @covers ::matches */
     public function testMatches(): void
     {
         $this->assertFalse($this->fixture->matches(self::createContext(null), new stdClass()));
@@ -39,7 +39,6 @@ final class Namespace_Test extends TestCase
         ));
     }
 
-    /** @covers ::create */
     public function testCreateThrowsException(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -50,7 +49,6 @@ final class Namespace_Test extends TestCase
         );
     }
 
-    /** @covers ::create */
     public function testIteratesStatements(): void
     {
         $class           = new ClassNode('\MyClass');

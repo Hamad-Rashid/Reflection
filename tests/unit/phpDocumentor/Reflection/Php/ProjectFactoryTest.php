@@ -19,6 +19,8 @@ use phpDocumentor\Reflection\Exception;
 use phpDocumentor\Reflection\File\LocalFile;
 use phpDocumentor\Reflection\Fqsen;
 use phpDocumentor\Reflection\Php\Factory\ContextStack;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use Prophecy\Argument as ProphesizeArgument;
 use Prophecy\PhpUnit\ProphecyTrait;
 
@@ -28,57 +30,37 @@ use function current;
 use function key;
 use function md5;
 
-/**
- * @uses \phpDocumentor\Reflection\Php\Project
- * @uses \phpDocumentor\Reflection\Php\Namespace_
- * @uses \phpDocumentor\Reflection\Php\Class_
- * @uses \phpDocumentor\Reflection\Php\Interface_
- * @uses \phpDocumentor\Reflection\Php\Trait_
- * @uses \phpDocumentor\Reflection\Php\Constant
- * @uses \phpDocumentor\Reflection\Php\File
- * @uses \phpDocumentor\Reflection\Php\Function_
- * @uses \phpDocumentor\Reflection\Php\ProjectFactoryStrategies
- * @uses \phpDocumentor\Reflection\Php\Visibility
- *
- * @coversDefaultClass \phpDocumentor\Reflection\Php\ProjectFactory
- * @covers ::__construct
- * @covers ::<private>
- */
+#[CoversClass(ProjectFactory::class)]
+#[UsesClass('\phpDocumentor\Reflection\Php\Project')]
+#[UsesClass('\phpDocumentor\Reflection\Php\Namespace_')]
+#[UsesClass('\phpDocumentor\Reflection\Php\Class_')]
+#[UsesClass('\phpDocumentor\Reflection\Php\Interface_')]
+#[UsesClass('\phpDocumentor\Reflection\Php\Trait_')]
+#[UsesClass('\phpDocumentor\Reflection\Php\Constant')]
+#[UsesClass('\phpDocumentor\Reflection\Php\File')]
+#[UsesClass('\phpDocumentor\Reflection\Php\Function_')]
+#[UsesClass('\phpDocumentor\Reflection\Php\ProjectFactoryStrategies')]
+#[UsesClass('\phpDocumentor\Reflection\Php\Visibility')]
+#[UsesClass('\phpDocumentor\Reflection\Middleware\ChainFactory')]
+#[UsesClass('\phpDocumentor\Reflection\Php\Factory\Property')]
+#[UsesClass('\phpDocumentor\Reflection\Php\Factory\Method')]
+#[UsesClass('\phpDocumentor\Reflection\Php\Factory\Class_')]
+#[UsesClass('\phpDocumentor\Reflection\Php\Factory\Interface_')]
+#[UsesClass('\phpDocumentor\Reflection\Php\Factory\ClassConstant')]
+#[UsesClass('\phpDocumentor\Reflection\Php\Factory\Define')]
+#[UsesClass('\phpDocumentor\Reflection\Php\Factory\GlobalConstant')]
+#[UsesClass('\phpDocumentor\Reflection\Php\Factory\Trait_')]
+#[UsesClass('\phpDocumentor\Reflection\Php\Factory\File')]
+#[UsesClass('\phpDocumentor\Reflection\Php\NodesFactory')]
 final class ProjectFactoryTest extends MockeryTestCase
 {
     use ProphecyTrait;
 
-    /**
-     * Tests whether a factory can be instantiated using recommended factories.
-     *
-     * This test is unable to test which exact factories are instantiated because that is not exposed by
-     * the factory. Even using assertEquals to do a regression test against a pre-populated factory does not
-     * work because there is a piece of randomness inside one of the properties; causing the tests to fail when
-     * you try to do it like that.
-     *
-     * @uses \phpDocumentor\Reflection\Middleware\ChainFactory
-     * @uses \phpDocumentor\Reflection\Php\Factory\Property
-     * @uses \phpDocumentor\Reflection\Php\Factory\Argument
-     * @uses \phpDocumentor\Reflection\Php\Factory\Method
-     * @uses \phpDocumentor\Reflection\Php\Factory\Class_
-     * @uses \phpDocumentor\Reflection\Php\Factory\Interface_
-     * @uses \phpDocumentor\Reflection\Php\Factory\ClassConstant
-     * @uses \phpDocumentor\Reflection\Php\Factory\Define
-     * @uses \phpDocumentor\Reflection\Php\Factory\GlobalConstant
-     * @uses \phpDocumentor\Reflection\Php\Factory\Argument
-     * @uses \phpDocumentor\Reflection\Php\Factory\Trait_
-     * @uses \phpDocumentor\Reflection\Php\Factory\DocBlock
-     * @uses \phpDocumentor\Reflection\Php\Factory\File
-     * @uses \phpDocumentor\Reflection\Php\NodesFactory
-     *
-     * @covers ::createInstance
-     */
     public function testCreatingAnInstanceInstantiatesItWithTheRecommendedStrategies(): void
     {
         $this->assertInstanceOf(ProjectFactory::class, ProjectFactory::createInstance());
     }
 
-    /** @covers ::create */
     public function testCreate(): void
     {
         $expected = ['some/file.php', 'some/other.php'];
@@ -125,7 +107,6 @@ final class ProjectFactoryTest extends MockeryTestCase
         $this->assertEquals(['some/file.php', 'some/other.php'], $projectFilePaths);
     }
 
-    /** @covers ::create */
     public function testCreateThrowsExceptionWhenStrategyNotFound(): void
     {
         $this->expectException(OutOfBoundsException::class);
@@ -133,7 +114,6 @@ final class ProjectFactoryTest extends MockeryTestCase
         $projectFactory->create('MyProject', ['aa']);
     }
 
-    /** @covers ::create */
     public function testCreateProjectFromFileWithNamespacedClass(): void
     {
         $file = new File(md5('some/file.php'), 'some/file.php');
@@ -150,7 +130,6 @@ final class ProjectFactoryTest extends MockeryTestCase
         $this->assertEquals('\mySpace\MyClass', key($mySpace->getClasses()));
     }
 
-    /** @covers ::create */
     public function testWithNamespacedInterface(): void
     {
         $file = new File(md5('some/file.php'), 'some/file.php');
@@ -165,7 +144,6 @@ final class ProjectFactoryTest extends MockeryTestCase
         $this->assertEquals('\mySpace\MyInterface', key($mySpace->getInterfaces()));
     }
 
-    /** @covers ::create */
     public function testWithNamespacedFunction(): void
     {
         $file = new File(md5('some/file.php'), 'some/file.php');
@@ -180,7 +158,6 @@ final class ProjectFactoryTest extends MockeryTestCase
         $this->assertEquals('\mySpace\function()', key($mySpace->getFunctions()));
     }
 
-    /** @covers ::create */
     public function testWithNamespacedConstant(): void
     {
         $file = new File(md5('some/file.php'), 'some/file.php');
@@ -195,7 +172,6 @@ final class ProjectFactoryTest extends MockeryTestCase
         $this->assertEquals('\mySpace::MY_CONST', key($mySpace->getConstants()));
     }
 
-    /** @covers ::create */
     public function testWithNamespacedTrait(): void
     {
         $file = new File(md5('some/file.php'), 'some/file.php');
@@ -210,7 +186,6 @@ final class ProjectFactoryTest extends MockeryTestCase
         $this->assertEquals('\mySpace\MyTrait', key($mySpace->getTraits()));
     }
 
-    /** @covers ::create */
     public function testNamespaceSpreadOverMultipleFiles(): void
     {
         $someFile = new File(md5('some/file.php'), 'some/file.php');
@@ -227,7 +202,6 @@ final class ProjectFactoryTest extends MockeryTestCase
         $this->assertCount(2, current($namespaces)->getClasses());
     }
 
-    /** @covers ::create */
     public function testSingleFileMultipleNamespaces(): void
     {
         $someFile = new File(md5('some/file.php'), 'some/file.php');

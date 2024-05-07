@@ -14,20 +14,17 @@ declare(strict_types=1);
 namespace phpDocumentor\Reflection\Php;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Test case for Visibility
- *
- * @coversDefaultClass \phpDocumentor\Reflection\Php\Visibility
  */
+#[CoversClass(Visibility::class)]
 class VisibilityTest extends TestCase
 {
-    /**
-     * @dataProvider visibilityProvider
-     * @covers ::__construct
-     * @covers ::__toString
-     */
+    #[DataProvider('visibilityProvider')]
     public function testVisibility(string $input, string $expected): void
     {
         $visibility = new Visibility($input);
@@ -36,7 +33,7 @@ class VisibilityTest extends TestCase
     }
 
     /** @return string[][] */
-    public function visibilityProvider(): array
+    public static function visibilityProvider(): array
     {
         return [
             ['public', 'public'],
@@ -46,7 +43,6 @@ class VisibilityTest extends TestCase
         ];
     }
 
-    /** @covers ::__construct */
     public function testVisibilityChecksInput(): void
     {
         $this->expectException(InvalidArgumentException::class);

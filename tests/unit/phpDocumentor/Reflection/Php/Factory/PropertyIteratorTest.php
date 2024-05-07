@@ -16,23 +16,14 @@ namespace phpDocumentor\Reflection\Php\Factory;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use PhpParser\Comment\Doc;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Property as PropertyNode;
 use PhpParser\Node\Stmt\PropertyProperty;
+use PHPUnit\Framework\Attributes\CoversClass;
 
-/**
- * @coversDefaultClass \phpDocumentor\Reflection\Php\Factory\PropertyIterator
- * @covers ::__construct
- * @covers ::<private>
- */
+#[CoversClass(PropertyIterator::class)]
 class PropertyIteratorTest extends MockeryTestCase
 {
-    /**
-     * @covers ::current()
-     * @covers ::next()
-     * @covers ::valid()
-     * @covers ::rewind()
-     * @covers ::getName()
-     */
     public function testIterateProps(): void
     {
         $prop1 = new PropertyProperty('prop1');
@@ -47,10 +38,6 @@ class PropertyIteratorTest extends MockeryTestCase
         }
     }
 
-    /**
-     * @covers ::key()
-     * @covers ::next()
-     */
     public function testKey(): void
     {
         $propertyMock = m::mock(PropertyNode::class);
@@ -62,15 +49,6 @@ class PropertyIteratorTest extends MockeryTestCase
         $this->assertEquals(1, $fixture->key());
     }
 
-    /**
-     * @covers ::__construct
-     * @covers ::isPublic
-     * @covers ::isProtected
-     * @covers ::isPrivate
-     * @covers ::isStatic
-     * @covers ::isReadOnly
-     * @covers ::getLine
-     */
     public function testProxyMethods(): void
     {
         $propertyMock = m::mock(PropertyNode::class);
@@ -91,22 +69,17 @@ class PropertyIteratorTest extends MockeryTestCase
         $this->assertEquals(10, $fixture->getLine());
     }
 
-    /**
-     * @covers ::__construct
-     * @covers ::getDefault
-     */
     public function testGetDefault(): void
     {
         $prop = m::mock(PropertyProperty::class);
-        $prop->default = 'myDefault';
+        $prop->default = new String_('myDefault');
         $property = new PropertyNode(1, [$prop]);
 
         $fixture = new PropertyIterator($property);
 
-        $this->assertEquals('myDefault', $fixture->getDefault());
+        $this->assertEquals(new String_('myDefault'), $fixture->getDefault());
     }
 
-    /** @covers ::getDocComment */
     public function testGetDocCommentPropFirst(): void
     {
         $prop = m::mock(PropertyProperty::class);
@@ -121,7 +94,6 @@ class PropertyIteratorTest extends MockeryTestCase
         $this->assertEquals('test', $fixture->getDocComment()->getText());
     }
 
-    /** @covers ::getDocComment */
     public function testGetDocComment(): void
     {
         $prop = m::mock(PropertyProperty::class);

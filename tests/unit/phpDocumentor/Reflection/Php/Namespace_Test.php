@@ -16,18 +16,18 @@ namespace phpDocumentor\Reflection\Php;
 use phpDocumentor\Reflection\DocBlock;
 use phpDocumentor\Reflection\Fqsen;
 use phpDocumentor\Reflection\Metadata\MetaDataContainer as MetaDataContainerInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Tests the functionality for the Namespace_ class.
- *
- * @coversDefaultClass phpDocumentor\Reflection\Php\Namespace_
  */
 // @codingStandardsIgnoreStart
+#[CoversClass(Namespace_::class)]
 class Namespace_Test extends TestCase
 // @codingStandardsIgnoreEnd
 {
-    use MetadataContainerTest;
+    use MetadataContainerTestHelper;
 
     protected Namespace_ $fixture;
 
@@ -51,11 +51,6 @@ class Namespace_Test extends TestCase
         return $this->fixture;
     }
 
-    /**
-     * @covers ::__construct
-     * @covers ::getClasses
-     * @covers ::AddClass
-     */
     public function testAddAndGetClasses(): void
     {
         $this->assertEmpty($this->fixture->getClasses());
@@ -66,11 +61,6 @@ class Namespace_Test extends TestCase
         $this->assertEquals(['\MySpace\MyClass' => $class], $this->fixture->getClasses());
     }
 
-    /**
-     * @covers ::__construct
-     * @covers ::getConstants
-     * @covers ::addConstant
-     */
     public function testAddAndGetConstants(): void
     {
         $this->assertEmpty($this->fixture->getConstants());
@@ -81,11 +71,6 @@ class Namespace_Test extends TestCase
         $this->assertEquals(['\MySpace::MY_CONSTANT' => $constant], $this->fixture->getConstants());
     }
 
-    /**
-     * @covers ::__construct
-     * @covers ::getFunctions
-     * @covers ::addFunction
-     */
     public function testAddAndGetFunctions(): void
     {
         $this->assertEmpty($this->fixture->getFunctions());
@@ -96,11 +81,6 @@ class Namespace_Test extends TestCase
         $this->assertEquals(['\MySpace\MyFunction()' => $function], $this->fixture->getFunctions());
     }
 
-    /**
-     * @covers ::__construct
-     * @covers ::getInterfaces
-     * @covers ::addInterface
-     */
     public function testAddAndGetInterfaces(): void
     {
         $this->assertEmpty($this->fixture->getInterfaces());
@@ -111,11 +91,6 @@ class Namespace_Test extends TestCase
         $this->assertEquals(['\MySpace\MyInterface' => $interface], $this->fixture->getInterfaces());
     }
 
-    /**
-     * @covers ::__construct
-     * @covers ::getTraits
-     * @covers ::addTrait
-     */
     public function testAddAndGetTraits(): void
     {
         $this->assertEmpty($this->fixture->getTraits());
@@ -126,11 +101,6 @@ class Namespace_Test extends TestCase
         $this->assertEquals(['\MySpace\MyTrait' => $trait], $this->fixture->getTraits());
     }
 
-    /**
-     * @covers ::__construct
-     * @covers ::getFqsen
-     * @covers ::getName
-     */
     public function testGetFqsen(): void
     {
         $this->assertSame($this->fqsen, $this->fixture->getFqsen());

@@ -70,9 +70,9 @@ final class Property extends AbstractFactory
 
         $iterator = new PropertyIterator($object);
         foreach ($iterator as $stmt) {
-            $default = null;
-            if ($iterator->getDefault() !== null) {
-                $default = $this->valueConverter->prettyPrintExpr($iterator->getDefault());
+            $default = $iterator->getDefault();
+            if ($default !== null) {
+                $default = $this->valueConverter->prettyPrintExpr($default);
             }
 
             $propertyContainer->addProperty(

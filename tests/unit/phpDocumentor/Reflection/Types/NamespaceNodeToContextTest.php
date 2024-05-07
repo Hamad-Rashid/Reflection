@@ -11,25 +11,21 @@ use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_ as UseStatement;
 use PhpParser\Node\Stmt\UseUse;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @coversDefaultClass \phpDocumentor\Reflection\Types\NamespaceNodeToContext
- * @covers ::<private>
- */
+#[CoversClass(NamespaceNodeToContext::class)]
 final class NamespaceNodeToContextTest extends TestCase
 {
-    /**
-     * @dataProvider expectedContextsProvider
-     * @covers ::__invoke
-     */
+    #[DataProvider('expectedContextsProvider')]
     public function testConversion(Namespace_|null $namespace, Context $expectedContext): void
     {
         $this->assertEquals($expectedContext, (new NamespaceNodeToContext())->__invoke($namespace));
     }
 
     /** @return (Namespace|Context|null)[][] */
-    public function expectedContextsProvider(): array
+    public static function expectedContextsProvider(): array
     {
         $namespaceWithImports = new Namespace_(
             new Name('With\\Imports'),

@@ -25,15 +25,12 @@ use PhpParser\Node\Stmt\EnumCase;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\PropertyProperty;
+use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeTraverser;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @uses \phpDocumentor\Reflection\NodeVisitor\ElementNameResolver::beforeTraverse
- *
- * @coversDefaultClass \phpDocumentor\Reflection\NodeVisitor\ElementNameResolver
- * @covers ::<private>
- */
+#[CoversClass(ElementNameResolver::class)]
 class ElementNameResolverTest extends TestCase
 {
     private ElementNameResolver $fixture;
@@ -44,7 +41,6 @@ class ElementNameResolverTest extends TestCase
         $this->fixture->beforeTraverse([]);
     }
 
-    /** @covers ::enterNode */
     public function testFunctionWithoutNamespace(): void
     {
         $function = new Function_('myFunction');
@@ -53,7 +49,6 @@ class ElementNameResolverTest extends TestCase
         $this->assertEquals('\myFunction()', (string) $function->getAttribute('fqsen'));
     }
 
-    /** @covers ::enterNode */
     public function testWithClass(): void
     {
         $class = new Class_('myClass');
@@ -62,7 +57,6 @@ class ElementNameResolverTest extends TestCase
         $this->assertEquals('\myClass', (string) $class->getAttribute('fqsen'));
     }
 
-    /** @covers ::enterNode */
     public function testWithClassMethod(): void
     {
         $class = new Class_('myClass');
@@ -74,7 +68,6 @@ class ElementNameResolverTest extends TestCase
         $this->assertEquals('\myClass::method()', (string) $method->getAttribute('fqsen'));
     }
 
-    /** @covers ::enterNode */
     public function testWithClassProperty(): void
     {
         $class = new Class_('myClass');
@@ -89,8 +82,6 @@ class ElementNameResolverTest extends TestCase
     /**
      * If anonymous classes were processed, we would obtain a
      * InvalidArgumentException for an invalid Fqsen.
-     *
-     * @covers ::enterNode
      */
     public function testDoesNotEnterAnonymousClass(): void
     {
@@ -101,19 +92,14 @@ class ElementNameResolverTest extends TestCase
         );
     }
 
-    /**
-     * @link https://github.com/phpDocumentor/Reflection/issues/103
-     *
-     * @covers ::enterNode
-     * @covers ::leaveNode
-     */
+    /** @link https://github.com/phpDocumentor/Reflection/issues/103 */
     public function testAnonymousClassDoesNotPopParts(): void
     {
         $anonymousClass = new Class_(null);
 
         $new = new New_($anonymousClass);
 
-        $namespace = new Namespace_(new Name('ANamespace'), $new);
+        $namespace = new Namespace_(new Name('ANamespace'), [new Return_($new)]);
 
         $this->fixture->enterNode($namespace);
         $this->fixture->enterNode($new);
@@ -125,7 +111,6 @@ class ElementNameResolverTest extends TestCase
         $this->assertTrue(true);
     }
 
-    /** @covers ::enterNode */
     public function testClassConstant(): void
     {
         $const      = new Const_('MY_CLASS', new String_('value'));
@@ -139,7 +124,6 @@ class ElementNameResolverTest extends TestCase
         $this->assertEquals('\\myClass::MY_CLASS', (string) $const->getAttribute('fqsen'));
     }
 
-    /** @covers ::enterNode */
     public function testNamespacedConstant(): void
     {
         $const     = new Const_('MY_CLASS', new String_('value'));
@@ -151,7 +135,6 @@ class ElementNameResolverTest extends TestCase
         $this->assertEquals('\\name\\MY_CLASS', (string) $const->getAttribute('fqsen'));
     }
 
-    /** @covers ::enterNode */
     public function testNoNameNamespace(): void
     {
         $const     = new Const_('MY_CLASS', new String_('value'));
@@ -163,7 +146,6 @@ class ElementNameResolverTest extends TestCase
         $this->assertEquals('\\MY_CLASS', (string) $const->getAttribute('fqsen'));
     }
 
-    /** @covers ::enterNode */
     public function testWithEnumWithCase(): void
     {
         $enum = new Enum_('myEnum');

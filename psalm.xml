@@ -16,5 +16,6 @@
     <issueHandlers>
         <LessSpecificReturnType errorLevel="info" />
         <MoreSpecificImplementedParamType errorLevel="info" />
+        <DeprecatedConstant errorLevel="info" />
     </issueHandlers>
 </psalm>

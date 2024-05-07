@@ -14,16 +14,13 @@ declare(strict_types=1);
 namespace phpDocumentor\Reflection\Middleware;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
-/**
- * @coversDefaultClass \phpDocumentor\Reflection\Middleware\ChainFactory
- * @covers ::<private>
- */
+#[CoversClass(ChainFactory::class)]
 final class ChainFactoryTest extends TestCase
 {
-    /** @covers ::createExecutionChain */
     public function testItCreatesAChainOfCallablesThatWillInvokeAllMiddlewares(): void
     {
         $exampleCommand = new class implements Command {
@@ -46,7 +43,6 @@ final class ChainFactoryTest extends TestCase
         $this->assertSame('abc', $chain(new $exampleCommand())->counter);
     }
 
-    /** @covers ::createExecutionChain */
     public function testItThrowsAnExceptionIfAnythingOtherThanAMiddlewareIsPassed(): void
     {
         $this->expectException(InvalidArgumentException::class);

@@ -10,14 +10,12 @@ use phpDocumentor\Reflection\Types\Context;
 use PhpParser\ConstExprEvaluationException;
 use PhpParser\Node\Expr\ShellExec;
 use PhpParser\Node\Scalar\MagicConst\Namespace_;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-/** @coversDefaultClass \phpDocumentor\Reflection\Php\ValueEvaluator\ConstantEvaluator */
+#[CoversClass(ConstantEvaluator::class)]
 final class ConstantEvaluatorTest extends TestCase
 {
-    /** @covers ::evaluate */
-
-    /** @covers ::evaluateFallback */
     public function testEvaluateThrowsWhenTypeContextIsNotSet(): void
     {
         $this->expectException(ConstExprEvaluationException::class);
@@ -26,9 +24,6 @@ final class ConstantEvaluatorTest extends TestCase
         $evaluator->evaluate(new Namespace_(), new ContextStack(new Project('test')));
     }
 
-    /** @covers ::evaluate */
-
-    /** @covers ::evaluateFallback */
     public function testEvaluateThrowsOnUnknownExpression(): void
     {
         $this->expectException(ConstExprEvaluationException::class);
@@ -37,9 +32,6 @@ final class ConstantEvaluatorTest extends TestCase
         $result = $evaluator->evaluate(new ShellExec([]), new ContextStack(new Project('test'), new Context('Test')));
     }
 
-    /** @covers ::evaluate */
-
-    /** @covers ::evaluateFallback */
     public function testEvaluateReturnsNamespaceFromContext(): void
     {
         $evaluator = new ConstantEvaluator();

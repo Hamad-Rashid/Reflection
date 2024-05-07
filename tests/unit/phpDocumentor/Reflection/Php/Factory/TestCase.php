@@ -20,11 +20,13 @@ use phpDocumentor\Reflection\Php\Project;
 use phpDocumentor\Reflection\Php\ProjectFactoryStrategy;
 use phpDocumentor\Reflection\Php\StrategyContainer;
 use phpDocumentor\Reflection\Types\Context;
+use PHPUnit\Framework\Attributes\CoversClass;
 use stdClass;
 
 /**
  * Base test case for all strategies, to be sure that they check if the can handle objects before handeling them.
  */
+#[CoversClass(AbstractFactory::class)]
 abstract class TestCase extends MockeryTestCase
 {
     protected ProjectFactoryStrategy $fixture;
@@ -37,7 +39,6 @@ abstract class TestCase extends MockeryTestCase
         );
     }
 
-    /** @covers \phpDocumentor\Reflection\Php\Factory\AbstractFactory::create */
     public function testCreateThrowsException(): void
     {
         $this->expectException(InvalidArgumentException::class);

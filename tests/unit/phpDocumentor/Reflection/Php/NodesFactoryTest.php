@@ -14,20 +14,16 @@ declare(strict_types=1);
 namespace phpDocumentor\Reflection\Php;
 
 use phpDocumentor\Reflection\NodeVisitor\ElementNameResolver;
-use PhpParser\Lexer\Emulative;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 
-/**
- * @coversDefaultClass \phpDocumentor\Reflection\Php\NodesFactory
- * @covers ::__construct
- * @covers ::<private>
- */
+#[CoversClass(NodesFactory::class)]
 final class NodesFactoryTest extends TestCase
 {
     use ProphecyTrait;
@@ -37,8 +33,6 @@ final class NodesFactoryTest extends TestCase
      *
      * Unfortunately, we cannot actually inspect whether all recommended items were instantiated, so I create an example
      * NodesFactory containing what I expected and this test will verify that no regression took place.
-     *
-     * @covers ::createInstance
      */
     public function testThatAFactoryWithRecommendedComponentsCanBeInstantiated(): void
     {
@@ -48,7 +42,6 @@ final class NodesFactoryTest extends TestCase
         $this->assertEquals($this->givenTheExpectedDefaultNodesFactory(), $factory);
     }
 
-    /** @covers ::create */
     public function testThatCodeGetsConvertedIntoNodes(): void
     {
         $parser = $this->prophesize(Parser::class);
@@ -66,16 +59,7 @@ final class NodesFactoryTest extends TestCase
 
     private function givenTheExpectedDefaultNodesFactory(): NodesFactory
     {
-        $lexer = new Emulative([
-            'usedAttributes' => [
-                'comments',
-                'startLine',
-                'endLine',
-                'startFilePos',
-                'endFilePos',
-            ],
-        ]);
-        $parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7, $lexer);
+        $parser = (new ParserFactory())->createForNewestSupportedVersion();
         $traverser = new NodeTraverser();
         $traverser->addVisitor(new NameResolver());
         $traverser->addVisitor(new ElementNameResolver());

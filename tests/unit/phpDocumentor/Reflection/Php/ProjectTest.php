@@ -14,15 +14,16 @@ declare(strict_types=1);
 namespace phpDocumentor\Reflection\Php;
 
 use phpDocumentor\Reflection\Fqsen;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Tests the functionality for the Project class.
- *
- * @coversDefaultClass \phpDocumentor\Reflection\Php\Project
- * @covers ::__construct
- * @covers ::<private>
  */
+#[CoversClass(Project::class)]
+#[UsesClass('\phpDocumentor\Reflection\Php\Namespace_')]
+#[UsesClass('\phpDocumentor\Reflection\Php\File')]
 class ProjectTest extends TestCase
 {
     final public const EXAMPLE_NAME = 'Initial name';
@@ -37,23 +38,11 @@ class ProjectTest extends TestCase
         $this->fixture = new Project(self::EXAMPLE_NAME);
     }
 
-    /**
-     * @uses \phpDocumentor\Reflection\Php\Namespace_
-     *
-     * @covers ::getName
-     */
     public function testGetSetName(): void
     {
         $this->assertEquals(self::EXAMPLE_NAME, $this->fixture->getName());
     }
 
-    /**
-     * @uses \phpDocumentor\Reflection\Php\Namespace_
-     * @uses \phpDocumentor\Reflection\Php\File
-     *
-     * @covers ::getFiles
-     * @covers ::addFile
-     */
     public function testGetAddFiles(): void
     {
         $this->assertEmpty($this->fixture->getFiles());
@@ -64,11 +53,6 @@ class ProjectTest extends TestCase
         $this->assertSame(['foo/bar' => $include], $this->fixture->getFiles());
     }
 
-    /**
-     * @uses \phpDocumentor\Reflection\Php\Namespace_
-     *
-     * @covers ::getRootNamespace
-     */
     public function testGetRootNamespace(): void
     {
         $this->assertInstanceOf(Namespace_::class, $this->fixture->getRootNamespace());
@@ -79,12 +63,6 @@ class ProjectTest extends TestCase
         $this->assertSame($namespaceDescriptor, $project->getRootNamespace());
     }
 
-    /**
-     * @uses \phpDocumentor\Reflection\Php\Namespace_
-     *
-     * @covers ::getNamespaces
-     * @covers ::addNamespace
-     */
     public function testGetAddNamespace(): void
     {
         $this->assertEmpty($this->fixture->getNamespaces());
