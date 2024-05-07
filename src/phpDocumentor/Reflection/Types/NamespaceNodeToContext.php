@@ -33,15 +33,21 @@ class NamespaceNodeToContext
     private function aliasesToFullyQualifiedNames(Namespace_ $namespace): array
     {
         // flatten(flatten(map(stuff)))
-        return array_merge([], ...array_merge([], ...array_map(static fn ($use): array => array_map(static function (UseUse $useUse) use ($use): array {
-            if ($use instanceof GroupUse) {
-                return [
-                    (string) $useUse->getAlias() => $use->prefix->toString() . '\\' . $useUse->name->toString(),
-                ];
-            }
+        return array_merge([], ...array_merge([], ...array_map(
+            static fn ($use): array => array_map(
+                static function (Node\UseItem|UseUse $useUse) use ($use): array {
+                    if ($use instanceof GroupUse) {
+                    return [
+                        (string) $useUse->getAlias() => $use->prefix->toString() . '\\' . $useUse->name->toString(),
+                    ];
+                    }
 
-            return [(string) $useUse->getAlias() => $useUse->name->toString()];
-        }, $use->uses), $this->classAlikeUses($namespace))));
+                return [(string) $useUse->getAlias() => $useUse->name->toString()];
+                },
+                $use->uses,
+            ),
+            $this->classAlikeUses($namespace),
+        )));
     }
 
     /** @return Use_[]|GroupUse[] */
