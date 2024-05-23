@@ -8,6 +8,7 @@ use phpDocumentor\Reflection\DocBlockFactoryInterface;
 use phpDocumentor\Reflection\Location;
 use phpDocumentor\Reflection\Php\Enum_ as EnumElement;
 use phpDocumentor\Reflection\Php\EnumCase as EnumCaseElement;
+use phpDocumentor\Reflection\Php\Factory\Reducer\Reducer;
 use phpDocumentor\Reflection\Php\StrategyContainer;
 use PhpParser\Node\Stmt\EnumCase as EnumCaseNode;
 use PhpParser\PrettyPrinter\Standard as PrettyPrinter;
@@ -16,9 +17,13 @@ use function assert;
 
 final class EnumCase extends AbstractFactory
 {
-    public function __construct(DocBlockFactoryInterface $docBlockFactory, private readonly PrettyPrinter $prettyPrinter)
-    {
-        parent::__construct($docBlockFactory);
+    /** @param iterable<Reducer> $reducers */
+    public function __construct(
+        DocBlockFactoryInterface $docBlockFactory,
+        private readonly PrettyPrinter $prettyPrinter,
+        iterable $reducers = [],
+    ) {
+        parent::__construct($docBlockFactory, $reducers);
     }
 
     public function matches(ContextStack $context, object $object): bool

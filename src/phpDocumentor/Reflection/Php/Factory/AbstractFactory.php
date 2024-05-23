@@ -31,7 +31,7 @@ abstract class AbstractFactory implements ProjectFactoryStrategy
     /** @param iterable<Reducer> $reducers */
     public function __construct(
         private readonly DocBlockFactoryInterface $docBlockFactory,
-        private readonly iterable $reducers = [],
+        protected readonly iterable $reducers = [],
     ) {
     }
 

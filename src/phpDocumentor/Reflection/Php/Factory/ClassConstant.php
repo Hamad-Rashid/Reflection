@@ -18,6 +18,7 @@ use phpDocumentor\Reflection\Location;
 use phpDocumentor\Reflection\Php\Class_;
 use phpDocumentor\Reflection\Php\Constant as ConstantElement;
 use phpDocumentor\Reflection\Php\Enum_;
+use phpDocumentor\Reflection\Php\Factory\Reducer\Reducer;
 use phpDocumentor\Reflection\Php\Interface_;
 use phpDocumentor\Reflection\Php\StrategyContainer;
 use phpDocumentor\Reflection\Php\Trait_;
@@ -34,9 +35,13 @@ use Webmozart\Assert\Assert;
  */
 final class ClassConstant extends AbstractFactory
 {
-    public function __construct(DocBlockFactoryInterface $blockFactory, private readonly PrettyPrinter $valueConverter)
-    {
-        parent::__construct($blockFactory);
+    /** @param iterable<Reducer> $reducers */
+    public function __construct(
+        DocBlockFactoryInterface $blockFactory,
+        private readonly PrettyPrinter $valueConverter,
+        iterable $reducers = [],
+    ) {
+        parent::__construct($blockFactory, $reducers);
     }
 
     public function matches(ContextStack $context, object $object): bool
@@ -73,7 +78,7 @@ final class ClassConstant extends AbstractFactory
         $constants = new ClassConstantIterator($object);
 
         foreach ($constants as $const) {
-            $constantContainer->addConstant(new ConstantElement(
+            $constant = new ConstantElement(
                 $const->getFqsen(),
                 $this->createDocBlock($const->getDocComment(), $context->getTypeContext()),
                 $const->getValue() !== null ? $this->valueConverter->prettyPrintExpr($const->getValue()) : null,
@@ -81,7 +86,17 @@ final class ClassConstant extends AbstractFactory
                 new Location($const->getEndLine()),
                 $this->buildVisibility($const),
                 $const->isFinal(),
-            ));
+            );
+
+            foreach ($this->reducers as $reducer) {
+                $constant = $reducer->reduce($context, $const, $strategies, $constant);
+            }
+
+            if ($constant === null) {
+                continue;
+            }
+
+            $constantContainer->addConstant($constant);
         }
 
         return null;

@@ -9,6 +9,7 @@ use phpDocumentor\Reflection\DocBlockFactoryInterface;
 use phpDocumentor\Reflection\Fqsen;
 use phpDocumentor\Reflection\Location;
 use phpDocumentor\Reflection\Php\Class_ as ClassElement;
+use phpDocumentor\Reflection\Php\Factory\Reducer\Reducer;
 use phpDocumentor\Reflection\Php\ProjectFactoryStrategy;
 use phpDocumentor\Reflection\Php\Property;
 use phpDocumentor\Reflection\Php\StrategyContainer;
@@ -22,12 +23,14 @@ use Webmozart\Assert\Assert;
 
 final class ConstructorPromotion extends AbstractFactory
 {
+    /** @param iterable<Reducer> $reducers */
     public function __construct(
         private readonly ProjectFactoryStrategy $methodStrategy,
         DocBlockFactoryInterface $docBlockFactory,
         private readonly PrettyPrinter $valueConverter,
+        iterable $reducers = [],
     ) {
-        parent::__construct($docBlockFactory);
+        parent::__construct($docBlockFactory, $reducers);
     }
 
     public function matches(ContextStack $context, object $object): bool
@@ -51,13 +54,13 @@ final class ConstructorPromotion extends AbstractFactory
                 continue;
             }
 
-            $this->promoteParameterToProperty($context, $param);
+            $this->promoteParameterToProperty($context, $strategies, $param);
         }
 
         return $context->peek();
     }
 
-    private function promoteParameterToProperty(ContextStack $context, Param $param): void
+    private function promoteParameterToProperty(ContextStack $context, StrategyContainer $strategies, Param $param): void
     {
         $methodContainer = $context->peek();
         Assert::isInstanceOf($methodContainer, ClassElement::class);
@@ -74,6 +77,14 @@ final class ConstructorPromotion extends AbstractFactory
             (new Type())->fromPhpParser($param->type),
             $this->readOnly($param->flags),
         );
+
+        foreach ($this->reducers as $reducer) {
+            $property = $reducer->reduce($context, $param, $strategies, $property);
+        }
+
+        if ($property === null) {
+            return;
+        }
 
         $methodContainer->addProperty($property);
     }

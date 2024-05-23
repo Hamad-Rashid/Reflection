@@ -77,16 +77,16 @@ final class ProjectFactory implements ProjectFactoryInterface
                 new \phpDocumentor\Reflection\Php\Factory\Namespace_(),
                 new Class_($docblockFactory, [$attributeReducer]),
                 new Enum_($docblockFactory, [$attributeReducer]),
-                new EnumCase($docblockFactory, new PrettyPrinter()),
+                new EnumCase($docblockFactory, new PrettyPrinter(), [$attributeReducer]),
                 new Define($docblockFactory, new PrettyPrinter()),
                 new GlobalConstant($docblockFactory, new PrettyPrinter()),
-                new ClassConstant($docblockFactory, new PrettyPrinter()),
+                new ClassConstant($docblockFactory, new PrettyPrinter(), [$attributeReducer]),
                 new Factory\File($docblockFactory, NodesFactory::createInstance()),
                 new Function_($docblockFactory, [$attributeReducer, $parameterReducer]),
-                new Interface_($docblockFactory),
+                new Interface_($docblockFactory, [$attributeReducer]),
                 $methodStrategy,
-                new Property($docblockFactory, new PrettyPrinter()),
-                new Trait_($docblockFactory),
+                new Property($docblockFactory, new PrettyPrinter(), [$attributeReducer]),
+                new Trait_($docblockFactory, [$attributeReducer]),
 
                 new IfStatement(),
                 new TraitUse(),
@@ -94,7 +94,7 @@ final class ProjectFactory implements ProjectFactoryInterface
         );
 
         $strategies->addStrategy(
-            new ConstructorPromotion($methodStrategy, $docblockFactory, new PrettyPrinter()),
+            new ConstructorPromotion($methodStrategy, $docblockFactory, new PrettyPrinter(), [$attributeReducer]),
             1100,
         );
         $strategies->addStrategy(new Noop(), -PHP_INT_MAX);

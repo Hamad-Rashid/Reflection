@@ -9,6 +9,13 @@ use phpDocumentor\Reflection\Php\StrategyContainer;
 
 interface Reducer
 {
+    /**
+     * @param TCarry|null $carry
+     *
+     * @return TCarry|null
+     *
+     * @template TCarry of object
+     */
     public function reduce(
         ContextStack $context,
         object $object,

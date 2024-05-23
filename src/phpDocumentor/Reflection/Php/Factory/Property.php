@@ -16,6 +16,7 @@ namespace phpDocumentor\Reflection\Php\Factory;
 use phpDocumentor\Reflection\DocBlockFactoryInterface;
 use phpDocumentor\Reflection\Location;
 use phpDocumentor\Reflection\Php\Class_;
+use phpDocumentor\Reflection\Php\Factory\Reducer\Reducer;
 use phpDocumentor\Reflection\Php\Property as PropertyDescriptor;
 use phpDocumentor\Reflection\Php\StrategyContainer;
 use phpDocumentor\Reflection\Php\Trait_;
@@ -32,12 +33,13 @@ use Webmozart\Assert\Assert;
  */
 final class Property extends AbstractFactory
 {
-    /**
-     * Initializes the object.
-     */
-    public function __construct(DocBlockFactoryInterface $docBlockFactory, private readonly PrettyPrinter $valueConverter)
-    {
-        parent::__construct($docBlockFactory);
+    /** @param iterable<Reducer> $reducers */
+    public function __construct(
+        DocBlockFactoryInterface $docBlockFactory,
+        private readonly PrettyPrinter $valueConverter,
+        iterable $reducers = [],
+    ) {
+        parent::__construct($docBlockFactory, $reducers);
     }
 
     public function matches(ContextStack $context, object $object): bool
@@ -75,19 +77,27 @@ final class Property extends AbstractFactory
                 $default = $this->valueConverter->prettyPrintExpr($default);
             }
 
-            $propertyContainer->addProperty(
-                new PropertyDescriptor(
-                    $stmt->getFqsen(),
-                    $this->buildVisibility($stmt),
-                    $this->createDocBlock($stmt->getDocComment(), $context->getTypeContext()),
-                    $default,
-                    $stmt->isStatic(),
-                    new Location($stmt->getLine()),
-                    new Location($stmt->getEndLine()),
-                    (new Type())->fromPhpParser($stmt->getType()),
-                    $stmt->isReadonly(),
-                ),
+            $property = new PropertyDescriptor(
+                $stmt->getFqsen(),
+                $this->buildVisibility($stmt),
+                $this->createDocBlock($stmt->getDocComment(), $context->getTypeContext()),
+                $default,
+                $stmt->isStatic(),
+                new Location($stmt->getLine()),
+                new Location($stmt->getEndLine()),
+                (new Type())->fromPhpParser($stmt->getType()),
+                $stmt->isReadonly(),
             );
+
+            foreach ($this->reducers as $reducer) {
+                $property = $reducer->reduce($context, $object, $strategies, $property);
+            }
+
+            if ($property === null) {
+                continue;
+            }
+
+            $propertyContainer->addProperty($property);
         }
 
         return null;
