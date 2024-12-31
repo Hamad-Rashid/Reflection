@@ -51,15 +51,15 @@ class ConstructorPromotionTest extends TestCase
 
         $constructor = $this->expectedContructorMethod();
         $constructor->addArgument(new Argument('name', new String_()));
-        $constructor->addArgument(new Argument('email', new String_(), '\'test@example.com\''));
         $constructor->addArgument(new Argument('birth_date', new Object_(new Fqsen('\\' . \DateTimeImmutable::class))));
+        $constructor->addArgument(new Argument('email', new String_(), '\'test@example.com\''));
 
         self::assertEquals($constructor, $class->getMethods()['\PHP8\ConstructorPromotion::__construct()']);
         self::assertEquals(
             [
                 '\PHP8\ConstructorPromotion::$name' => $this->expectedNameProperty(),
-                '\PHP8\ConstructorPromotion::$email' => $this->expectedEmailProperty(),
-                '\PHP8\ConstructorPromotion::$birth_date' => $this->expectedBirthDateProperty()
+                '\PHP8\ConstructorPromotion::$birth_date' => $this->expectedBirthDateProperty(),
+                '\PHP8\ConstructorPromotion::$email' => $this->expectedEmailProperty()
             ],
             $class->getProperties()
         );
